@@ -1,0 +1,28 @@
+[project]
+name = "terraform-live"
+description = "Repository containing current infrastructure in Terragrunt."
+authors = [
+  { name = "Charlie Collier", email = "collier.p.charlie@gmail.com" }
+]
+maintainers = [
+  { name = "Charlie Collier", email = "collier.p.charlie@gmail.com" }
+]
+readme = "README.md"
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Framework :: Hatch"
+]
+version = "1.0.0"  # https://packaging.python.org/en/latest/discussions/versioning/
+requires-python = ">=3.13"
+dependencies = [
+    "pre-commit>=4.3.0"
+]
+
+[project.urls]
+Documentation = ""
+Repository = "https://github.com/collier-p-charlie/terraform-live"
+Issues = "https://github.com/collier-p-charlie/terraform-live/issues"
+Changelog = "https://github.com/collier-p-charlie/terraform-live/blob/main/CHANGELOG.md"

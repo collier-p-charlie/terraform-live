@@ -1,0 +1,33 @@
+# This workflow will tag the main branch automatically when the CHANGELOG is updated.
+
+name: Auto Tagging of Branch
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  auto-tag-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get version
+        id: get-version
+        run: |
+          VERSION=$(grep ^version pyproject.toml | sed -r 's/^version = "(.*)"(.*)/\1/g')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create tag
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+          TAG=${{ steps.get-version.outputs.version }}
+          .github/scripts/create-tag.sh "$TAG"

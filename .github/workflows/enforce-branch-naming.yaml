@@ -1,0 +1,28 @@
+# This workflow will validate the branch name against conventions
+
+name: Enforce Branch Naming
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  check-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Check branch name
+        env:
+          SRC_BRANCH: ${{ github.head_ref }}
+          TARGET_BRANCH: ${{ github.base_ref }}
+        run: |
+          .github/scripts/check-branch-name.sh $SRC_BRANCH $TARGET_BRANCH

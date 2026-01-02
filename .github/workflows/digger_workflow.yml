@@ -1,0 +1,56 @@
+# Workflow for Digger Terraform orchestration
+
+name: Digger Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      spec:
+        required: true
+        description: |
+          The specification for the deployment or job, typically a JSON or
+          YAML file that defines the parameters for the run.
+      run_name:
+        required: false
+        description: "An optional name for the run."
+
+run-name: '${{ inputs.run_name }}'
+
+jobs:
+  digger-job:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write      # required to merge PRs
+      actions: write       # required for plan persistence
+      id-token: write      # required for workload-identity-federation
+      pull-requests: write # required to post PR comments
+      issues: read         # required to check if PR number is an issue or not
+      statuses: write      # required to validate combined PR status
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: ${{ fromJSON(github.event.inputs.spec).job_id }}
+        run: echo "job id ${{ fromJSON(github.event.inputs.spec).job_id }}"
+
+      - uses: diggerhq/digger@vLatest
+        with:
+          digger-spec: ${{ inputs.spec }}
+          setup-terraform: true
+          terraform-version: 1.14.3
+          setup-terragrunt: true
+          terragrunt-version: 0.96.1
+          # has AssumeRole to required roles and also state management permissions
+          setup-aws: true
+          aws-role-to-assume: ${{ vars.DIGGER_DEPLOYMENT_ROLE }}
+          aws-region: eu-west-2
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # PAT is for this repository to access another (the module repo)
+          GIT_CONFIG_COUNT: "1"
+          GIT_CONFIG_KEY_0: "url.https://x-access-token:${{ secrets.GH_PAT_MODULES }}@github.com/.insteadOf"
+          GIT_CONFIG_VALUE_0: "ssh://git@github.com/"
