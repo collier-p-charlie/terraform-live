@@ -1,0 +1,22 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "${principal_arn}"
+      },
+      "Action": [
+        "sts:AssumeRoleWithWebIdentity"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "${domain_name}:aud": "${audience}"
+        },
+        "StringLike": {
+          "${domain_name}:sub": "repo:${github_org}/*"
+        }
+      }
+    }
+  ]
+}

@@ -1,21 +1,31 @@
 generate_projects:
   blocks:
-    - block_name: demo-prod
-      root_dir: "terragrunt/projects/demo/prod"
+    - block_name: tcl-edp-prod
+      root_dir: "terragrunt/projects/tcl-edp/prod"
+      include_patterns:
+        - "./policy/**"  # . is relative to project, others are from digger.yaml directory
       terragrunt: true
       workflow: default
+      apply_requirements: [ mergeable, undiverged, approved ]
 
-    - block_name: demo-uat
-      root_dir: "terragrunt/projects/demo/uat"
+    - block_name: tcl-edp-uat
+      root_dir: "terragrunt/projects/tcl-edp/uat"
+      include_patterns:
+        - "./policy/**"
       terragrunt: true
       workflow: default
+      apply_requirements: [ mergeable, undiverged ]
+
+    - block_name: devops
+      root_dir: "terragrunt/projects/devops"
+      include_patterns:
+        - "./policy/**"
+      terragrunt: true
+      workflow: default
+      apply_requirements: [ mergeable, undiverged ]
 
 workflows:
   default:
-    workflow_configuration:
-      on_pull_request_closed: ["digger unlock"]
-      on_commit_to_default: ["digger unlock"]
-
     plan:
       steps:
       - init:
@@ -24,3 +34,23 @@ workflows:
       steps:
       - init:
       - apply:
+
+    workflow_configuration:
+      on_pull_request_closed: ["digger unlock"]
+      on_commit_to_default: ["digger unlock"]
+      skip_merge_check: true
+
+  prod:
+    plan:
+      steps:
+        - init:
+        - plan:
+    apply:
+      steps:
+        - init:
+        - apply:
+
+    workflow_configuration:
+      on_pull_request_closed: [ "digger unlock" ]
+      on_commit_to_default: [ "digger unlock" ]
+      skip_merge_check: false

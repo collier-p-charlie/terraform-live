@@ -1,0 +1,63 @@
+{
+  "Statement": [
+    {
+      "Action": [
+        "sts:AssumeRole"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:iam::*:role/aws-org-tf-command-management"
+      ],
+      "Sid": "AssumeTfCommandRoles"
+    },
+    {
+      "Action": [
+        "s3:GetObject",
+        "s3:GetObjectAcl",
+        "s3:ListBucket",
+        "s3:PutObject",
+        "s3:PutObjectAcl"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "${asset_bucket_arn}",
+        "${asset_bucket_arn}/*"
+      ],
+      "Sid": "TfAssetBucketMgmt"
+    },
+    {
+      "Action": [
+        "s3:ListBucket"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "${state_bucket_arn}"
+      ],
+      "Sid": "TfStateBucketPerms"
+    },
+    {
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "${state_bucket_arn}/*"
+      ],
+      "Sid": "TfStateGetPut"
+    },
+    {
+      "Action": [
+        "s3:DeleteObject",
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "${state_bucket_arn}/*.tflock"
+      ],
+      "Sid": "TfStateLockHandling"
+    }
+  ],
+  "Version": "2012-10-17"
+}

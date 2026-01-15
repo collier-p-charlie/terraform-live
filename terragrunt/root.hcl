@@ -11,6 +11,7 @@ locals {
 
   # AWS organisation wide state bucket
   aws_org_state_bucket = "aws-org-tf-state-bucket"
+  aws_org_asset_bucket = "aws-org-tf-assets-bucket"
 
   # Modules repo
   source_base_url = "git@github.com:collier-p-charlie/terraform-modules.git/"

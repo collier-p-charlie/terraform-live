@@ -1,0 +1,26 @@
+{
+  "Statement": [
+    {
+      "Action": [
+        "s3:ListBucket",
+        "s3:GetObject",
+        "s3:GetObjectTagging",
+        "s3:GetObjectVersion"
+      ],
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": [
+          "arn:aws:iam::11111111111:role/aws-org-tf-command-management",
+          "arn:aws:iam::09876543210:role/aws-org-tf-command-management",
+          "arn:aws:iam::01234567890:role/aws-org-tf-command-management"
+        ]
+      },
+      "Resource": [
+        "arn:aws:s3:::${bucket_name}",
+        "arn:aws:s3:::${bucket_name}/*"
+      ],
+      "Sid": "TfAssetHandling"
+    }
+  ],
+  "Version": "2012-10-17"
+}

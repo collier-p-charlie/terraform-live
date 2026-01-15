@@ -1,0 +1,27 @@
+generate_projects:
+  # only drift on PROD workloads
+  blocks:
+    - block_name: tcl-edp-prod
+      root_dir: "terragrunt/projects/demo/prod"
+      terragrunt: true
+      workflow: default
+
+    - block_name: devops
+      root_dir: "terragrunt/projects/devops"
+      terragrunt: true
+      workflow: default
+
+workflows:
+  default:
+    workflow_configuration:
+      on_pull_request_closed: ["digger unlock"]
+      on_commit_to_default: ["digger unlock"]
+
+    plan:
+      steps:
+      - init:
+      - plan:
+    apply:
+      steps:
+      - init:
+      - apply:

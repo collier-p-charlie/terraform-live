@@ -1,0 +1,30 @@
+{
+  "Statement": [
+    {
+      "Action": "s3:ListBucket",
+      "Effect": "Allow",
+      "Resource": "${state_bucket_arn}",
+      "Sid": "StateManagementBucket"
+    },
+    {
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Effect": "Allow",
+      "Resource": "${state_bucket_arn}/*",
+      "Sid": "StateManagementFile"
+    },
+    {
+      "Action": [
+        "s3:DeleteObject",
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Effect": "Allow",
+      "Resource": "${state_bucket_arn}/*.tflock",
+      "Sid": "StateManagementLock"
+    }
+  ],
+  "Version": "2012-10-17"
+}

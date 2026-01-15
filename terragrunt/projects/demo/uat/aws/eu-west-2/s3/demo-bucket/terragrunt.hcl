@@ -1,5 +1,5 @@
 terraform {
-  source = "${include.root.locals.source_base_url}/modules/aws/s3?ref=aws-s3.v1.0.0
+  source = "${include.root.locals.source_base_url}/modules/aws/s3?ref=aws-s3.v1.0.0"
 }
 
 include "root" {
@@ -24,8 +24,8 @@ locals {
   resource_id = "${local.project_id}-${local.env}"
 
   # source specific attributes
-  bucket_id               = basename(get_terragrunt_dir())
-  bucket_name             = "${local.resource_id}-${local.bucket_id}"
+  bucket_id   = basename(get_terragrunt_dir())
+  bucket_name = "${local.resource_id}-${local.bucket_id}"
 }
 
 inputs = {

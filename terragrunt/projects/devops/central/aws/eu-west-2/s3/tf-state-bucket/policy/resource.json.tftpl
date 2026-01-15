@@ -1,0 +1,59 @@
+{
+  "Statement": [
+    {
+      "Action": [
+        "s3:ListBucket"
+      ],
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": [
+          "arn:aws:iam::11111111111:role/aws-org-tf-state-management",
+          "arn:aws:iam::09876543210:role/aws-org-tf-state-management",
+          "arn:aws:iam::01234567890:role/aws-org-tf-state-management"
+        ]
+      },
+      "Resource": [
+        "arn:aws:s3:::${bucket_name}"
+      ],
+      "Sid": "ListStateBucket"
+    },
+    {
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": [
+          "arn:aws:iam::11111111111:role/aws-org-tf-state-management",
+          "arn:aws:iam::09876543210:role/aws-org-tf-state-management",
+          "arn:aws:iam::01234567890:role/aws-org-tf-state-management"
+        ]
+      },
+      "Resource": [
+        "arn:aws:s3:::${bucket_name}/*"
+      ],
+      "Sid": "GetPutBucket"
+    },
+    {
+      "Action": [
+        "s3:DeleteObject",
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": [
+          "arn:aws:iam::11111111111:role/aws-org-tf-state-management",
+          "arn:aws:iam::09876543210:role/aws-org-tf-state-management",
+          "arn:aws:iam::01234567890:role/aws-org-tf-state-management"
+        ]
+      },
+      "Resource": [
+        "arn:aws:s3:::${bucket_name}/*.tflock"
+      ],
+      "Sid": "TfStateLockHandling"
+    }
+  ],
+  "Version": "2012-10-17"
+}
